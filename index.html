@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drawing App</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 20px;
+      color: #333;
+    }
+
+    .toolbar {
+      background: white;
+      padding: 10px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-size: 14px;
+    }
+
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      background: #ff7a18;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ff5200;
+    }
+
+    canvas {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+      cursor: url("https://cdn-icons-png.flaticon.com/512/1827/1827951.png") 0 32, auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🎨 My Drawing App</h1>
+
+  <div class="toolbar">
+    <label>
+      Color:
+      <input type="color" id="colorPicker" value="#000000">
+    </label>
+
+    <label>
+      Size:
+      <input type="range" id="brushSize" min="1" max="20" value="5">
+    </label>
+
+    <button id="clearBtn">Clear</button>
+  </div>
+
+  <canvas id="canvas" width="800" height="450"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const colorPicker = document.getElementById("colorPicker");
+    const brushSize = document.getElementById("brushSize");
+    const clearBtn = document.getElementById("clearBtn");
+
+    let isDrawing = false;
+
+    canvas.addEventListener("mousedown", () => {
+      isDrawing = true;
+      ctx.beginPath();
+    });
+
+    canvas.addEventListener("mouseup", () => {
+      isDrawing = false;
+    });
+
+    canvas.addEventListener("mousemove", draw);
+
+    function draw(event) {
+      if (!isDrawing) return;
+
+      ctx.lineWidth = brushSize.value;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = colorPicker.value;
+
+      ctx.lineTo(
+        event.offsetX,
+        event.offsetY
+      );
+      ctx.stroke();
+    }
+
+    clearBtn.addEventListener("click", () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+  </script>
+
+</body>
+</html>
